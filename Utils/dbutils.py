@@ -61,8 +61,8 @@ class Database(object):  # noqa
         '''
         with self._session_scope() as session:
 
-            drop_sql = "drop table if exists {}".format(table_name)
-            session.execute(sqlalchemy.text(drop_sql))
+            # drop_sql = "drop table if exists {}".format(table_name)
+            # session.execute(sqlalchemy.text(drop_sql))
             
             session.execute(sqlalchemy.text(sql))
             session.commit()
@@ -170,14 +170,11 @@ class Database(object):  # noqa
         Returns:
             pandas.Series of all tables in schema
         '''
-        sql = """
+        sql = f"""
             select table_name
-            from information_schema.tables
-            {};
-        """.format(
-            '' if schema is None
-            else "where table_schema = '{}'".format(schema)
-        )
+            from `{schema}.INFORMATION_SCHEMA.TABLES`
+            ;
+        """
         return self.query(sql)['table_name']
             
 

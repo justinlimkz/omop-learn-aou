@@ -107,13 +107,13 @@ with
         date '{training_end_date}' as end_date,
         d.mi_datetime as outcome_date,
         
-        coalesce(
+        cast(coalesce(
             (d.mi_datetime between
                 date_add(date '{training_end_date}', INTERVAL {gap})
                 and
                 date_add(date_add(date '{training_end_date}', interval {gap}), interval {outcome_window})
             ), false
-        )::int as y
+        ) as INT64) as y
     from
         mi_testwindow_elig_perc te
         left join mi_dates d on d.person_id = te.person_id

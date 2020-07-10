@@ -3,7 +3,7 @@ select
     a.procedure_concept_id || ' - procedure - ' || coalesce (
         c.concept_name, 'no match'
     ) as concept_name,
-    a.procedure_datetime as feature_start_date,
+    cast(a.procedure_datetime as DATE) as feature_start_date,
     b.start_date as person_start_date,
     b.end_date as person_end_date
 from 

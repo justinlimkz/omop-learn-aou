@@ -3,7 +3,7 @@ select
     p.specialty_concept_id || ' - specialty - ' || coalesce (
         c.concept_name, 'no match'
     ) as concept_name,
-    a.visit_start_date as feature_start_date,
+    cast(a.visit_start_date as DATE) as feature_start_date,
     b.start_date as person_start_date,
     b.end_date as person_end_date
 from 

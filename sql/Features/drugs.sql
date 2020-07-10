@@ -3,7 +3,7 @@ select
     a.drug_concept_id || ' - drug - ' || coalesce (
         c.concept_name, 'no match'
     ) as concept_name,
-    a.drug_exposure_start_datetime as feature_start_date,
+    cast(a.drug_exposure_start_datetime as DATE) as feature_start_date,
     b.start_date as person_start_date,
     b.end_date as person_end_date
 from 

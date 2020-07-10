@@ -111,7 +111,7 @@ with
             (d.mi_datetime between
                 date_add(date '{training_end_date}', INTERVAL {gap})
                 and
-                date_add(date_add(date {training_end_date}, interval {gap}), interval {outcome_window})
+                date_add(date_add(date '{training_end_date}', interval {gap}), interval {outcome_window})
             ), false
         )::int as y
     from
@@ -120,7 +120,7 @@ with
     where
         (
             d.mi_datetime is null
-            or d.mi_datetime >= date_add(date {training_end_date}, interval {gap})
+            or d.mi_datetime >= date_add(date '{training_end_date}', interval {gap})
         )
     ;
 

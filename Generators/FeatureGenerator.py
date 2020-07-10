@@ -78,20 +78,17 @@ class FeatureSet():
         else:
             self._nontemporal_features.append(feature)
 
-    def add_default_features(self, default_features, schema_name=None, cohort_name=None):
+    def add_default_features(self, default_features, omop_cdm_schema=None, cohort_table_name=None):
         fns = [
-            './sql/Features/{}.sql'.format(f)
+            './omop-learn/sql/Features/{}.sql'.format(f)
             for f in default_features
         ]
         for fn in fns:
             feature = Feature(
-                fn,
+                fn
                 {
-                    'cdm_schema':config.OMOP_CDM_SCHEMA,
-                    'cohort_table':'{}.{}'.format(
-                        schema_name,
-                        cohort_name
-                    )
+                    'cdm_schema': omop_cdm_schema,
+                    'cohort_table': cohort_table_name.
                 }
             )
             self.add(feature)
@@ -104,16 +101,31 @@ class FeatureSet():
             self._temporal_feature_names +  self._nontemporal_feature_names
         )
 
-    def build(self, cohort, cache_file='/tmp/store.csv', from_cached=False):
+    def build(self, 
+              schema_name='',
+              cohort_table_name=None,
+              cohort_generation_script=None,
+              cohort_generation_kwargs=None,
+              first=None,
+              verbose=True,
+              outcome_col_name='y',
+              omop_cdm_schema=None, 
+              cohort_table_name=None, 
+              cache_file='/tmp/store.csv', 
+              from_cached=False):
+        
+        # Generate cohort here
+        with open(self._cohort_generation_script, 'r') as f:
+            cohort_generation_sql_raw = f.read()
+        
         sep_col = self.id_col
-        joined_sql = "{} order by {} asc".format(
+        joined_sql = "{}, {} order by {} asc".format(
+            "with {} as {}".format(cohort_table_name, cohort_generation_sql_raw.format(**self._cohort_generation_kwargs)
+            ),
             " union all ".join(
                     f._sql_raw.format(
-                        cdm_schema=config.OMOP_CDM_SCHEMA,
-                        cohort_table='{}.{}'.format(
-                            cohort._schema_name,
-                            cohort._cohort_table_name
-                        )
+                        cdm_schema=omop_cdm_schema,
+                        cohort_table=cohort_table_name
                     )
                 for f in self._temporal_features
             ),
@@ -161,7 +173,7 @@ class FeatureSet():
         
         t = time.time()
         store.seek(0)
-        self.ids = cohort._cohort[self.id_col].unique()
+        # self.ids = cohort._cohort[self.id_col].unique()
         self.id_map = {i:person_id for i,person_id in enumerate(self.seen_ids)}
         self.id_map_rev = {person_id:i for i,person_id in enumerate(self.seen_ids)}
         self.concept_map = {i:concept_name for i,concept_name in enumerate(self.concepts)}

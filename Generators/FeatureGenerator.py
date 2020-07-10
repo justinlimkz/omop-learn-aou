@@ -85,10 +85,10 @@ class FeatureSet():
         ]
         for fn in fns:
             feature = Feature(
-                fn
+                fn,
                 {
                     'cdm_schema': omop_cdm_schema,
-                    'cohort_table': cohort_table_name.
+                    'cohort_table': cohort_table_name
                 }
             )
             self.add(feature)

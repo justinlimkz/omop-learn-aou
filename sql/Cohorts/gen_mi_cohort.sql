@@ -92,12 +92,8 @@ with
         group by 
             person_id
         having
-            sum(num_days) >= 0.95 * extract(
-                days from (
-                    date_add(INTERVAL {gap},
-                    INTERVAL {outcome_window})
-                )
-            )
+            sum(num_days) >= 0.95 * date_diff(date_add(date_add(DATE '01-01-1900', INTERVAL {gap}), INTERVAL {outcome_window}),
+                                                                DATE '01-01-1900', DAY)
     ) 
     
     select

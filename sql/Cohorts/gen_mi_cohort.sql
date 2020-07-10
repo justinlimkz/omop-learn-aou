@@ -24,7 +24,7 @@ with
                 {omop_cdm_schema}.concept_ancestor ca
             on 
                 co.condition_concept_id = ca.descendant_concept_id
-            where ancestor_concept_id = 4329847
+            where ancestor_concept_id = 316866
         )a where rn = 1
     ),
     mi_training_elig_counts as (

@@ -101,10 +101,10 @@ with
         te.person_id,
         date '{training_start_date}' as start_date,
         date '{training_end_date}' as end_date,
-        d.mi_datetime as outcome_date,
+        cast(d.mi_datetime as DATE) as outcome_date,
         
         cast(coalesce(
-            (d.mi_datetime between
+            (cast(d.mi_datetime as DATE) between
                 date_add(date '{training_end_date}', INTERVAL {gap})
                 and
                 date_add(date_add(date '{training_end_date}', interval {gap}), interval {outcome_window})

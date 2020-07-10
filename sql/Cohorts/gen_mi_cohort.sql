@@ -61,7 +61,7 @@ with
         group by
             person_id
         having
-            sum(num_days) >= 0.95 * (date '{training_end_date}' - date '{training_start_date}')
+            sum(num_days) >= 0.95 * (date_diff(date '{training_end_date}', date '{training_start_date}', DAY))
     ),
     mi_testperiod_elig_counts as (
         select

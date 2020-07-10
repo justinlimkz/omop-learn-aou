@@ -140,7 +140,7 @@ class FeatureSet():
 #                 query=joined_sql,
 #                 head="HEADER"
 #             )
-#             t = time.time()
+            t = time.time()
             conn = self._db.engine.raw_connection()
 #             cur = conn.cursor()
 #             store = open(cache_file,'wb')

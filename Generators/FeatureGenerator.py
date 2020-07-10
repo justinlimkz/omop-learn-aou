@@ -130,22 +130,24 @@ class FeatureSet():
             ",".join([sep_col, self.time_col, self.feature_col])
         )
         if not from_cached:
-            copy_sql = """
-                copy 
-                    ({query})
-                to 
-                    stdout 
-                with 
-                    csv {head}
-            """.format(
-                query=joined_sql,
-                head="HEADER"
-            )
-            t = time.time()
+#             copy_sql = """
+#                 copy 
+#                     ({query})
+#                 to 
+#                     stdout 
+#                 with 
+#                     csv {head}
+#             """.format(
+#                 query=joined_sql,
+#                 head="HEADER"
+#             )
+#             t = time.time()
             conn = self._db.engine.raw_connection()
-            cur = conn.cursor()
+#             cur = conn.cursor()
             store = open(cache_file,'wb')
-            cur.copy_expert(copy_sql, store)
+#             cur.copy_expert(copy_sql, store)
+            result = pd.read_sql(joined_sql, conn)
+            result.to_csv(store)
             store.seek(0)
             print('Data loaded to buffer in {0:.2f} seconds'.format(
                 time.time()-t

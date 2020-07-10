@@ -4,7 +4,6 @@
     Inclusion criteria:
     - Enrolled in 95% of months of training
     - Enrolled in 95% of days during outcome window
-    - Patient over the age of 70 at prediction time
 */
 
 with
@@ -28,13 +27,6 @@ with
             where ancestor_concept_id = 4329847
         )a where rn = 1
     ),
-    eligible_people as (
-        select p.person_id
-        from {omop_cdm_schema}.person p
-        where extract(
-            year from date '{training_end_date}'
-        ) - p.year_of_birth > 70
-    ),
     mi_training_elig_counts as (
         select
             o.person_id,
@@ -50,8 +42,6 @@ with
                 ), DAY), 0
             ) as num_days
         from {omop_cdm_schema}.observation_period o
-        inner join eligible_people p
-        on o.person_id = p.person_id
     ),
     mi_trainingwindow_elig_perc as (
         select

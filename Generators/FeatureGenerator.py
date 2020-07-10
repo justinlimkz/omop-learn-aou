@@ -146,6 +146,7 @@ class FeatureSet():
 #             store = open(cache_file,'wb')
 #             cur.copy_expert(copy_sql, store)
             result = pd.read_sql(joined_sql, conn)
+            print(result.head())
             result.to_csv(cache_file)
 #             store.seek(0)
             print('Data loaded to buffer in {0:.2f} seconds'.format(
@@ -190,7 +191,6 @@ class FeatureSet():
         spm_arr = []
         self.recorded_ids = set()
         for chunk_num, chunk in enumerate(pd.read_csv(store, chunksize=chunksize)):
-            print(chunk.shape)
             first = chunk.iloc[0][sep_col]
 
             vals = chunk[sep_col].unique()

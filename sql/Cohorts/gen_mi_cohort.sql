@@ -116,6 +116,6 @@ with
     where
         (
             d.mi_datetime is null
-            or d.mi_datetime >= date_add(date '{training_end_date}', interval {gap})
+            or cast(d.mi_datetime as DATE) >= date_add(date '{training_end_date}', interval {gap})
         )
 

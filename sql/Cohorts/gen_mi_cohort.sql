@@ -41,13 +41,13 @@ with
             o.observation_period_start_date as start,
             o.observation_period_end_date as finish,
             greatest(
-                least (
+                date_diff(least (
                     o.observation_period_end_date,
                     date '{training_end_date}'
-                ) - greatest(
+                ), greatest(
                     o.observation_period_start_date,
                     date '{training_start_date}'
-                ), 0
+                ), DAY), 0
             ) as num_days
         from {omop_cdm_schema}.observation_period o
         inner join eligible_people p
@@ -69,14 +69,14 @@ with
             p.observation_period_start_date as start,
             p.observation_period_end_date as finish,
             greatest(
-                    least (
+                    date_diff(least (
                         p.observation_period_end_date,
                         date_add(date_add(
                             date '{training_end_date}', INTERVAL {gap}), INTERVAL {outcome_window})
-                    ) - greatest(
+                    ), greatest(
                         p.observation_period_start_date,
                         date '{training_end_date}'
-                    ), 0
+                    ), DAY), 0
             ) as num_days
         from {omop_cdm_schema}.observation_period p
         inner join 

@@ -143,11 +143,11 @@ class FeatureSet():
 #             t = time.time()
             conn = self._db.engine.raw_connection()
 #             cur = conn.cursor()
-            store = open(cache_file,'wb')
+#             store = open(cache_file,'wb')
 #             cur.copy_expert(copy_sql, store)
             result = pd.read_sql(joined_sql, conn)
-            result.to_csv(store)
-            store.seek(0)
+            result.to_csv(cache_file)
+#             store.seek(0)
             print('Data loaded to buffer in {0:.2f} seconds'.format(
                 time.time()-t
             ))

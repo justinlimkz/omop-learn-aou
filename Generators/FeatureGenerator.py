@@ -190,6 +190,7 @@ class FeatureSet():
         spm_arr = []
         self.recorded_ids = set()
         for chunk_num, chunk in enumerate(pd.read_csv(store, chunksize=chunksize)):
+            print(chunk.shape)
             first = chunk.iloc[0][sep_col]
 
             vals = chunk[sep_col].unique()

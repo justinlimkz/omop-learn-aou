@@ -102,7 +102,6 @@ class FeatureSet():
         )
 
     def build(self, 
-              schema_name='',
               omop_cdm_schema=None, 
               cohort_table_name=None,
               cohort_generation_script=None,

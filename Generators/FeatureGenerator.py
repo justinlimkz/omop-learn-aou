@@ -117,7 +117,7 @@ class FeatureSet():
             cohort_generation_sql_raw = f.read()
         
         sep_col = self.id_col
-        joined_sql = "with {} as ({}), {} order by {} asc".format(cohort_table_name, 
+        joined_sql = "with {} as ({}) {} order by {} asc".format(cohort_table_name, 
                                                                   cohort_generation_sql_raw.format(**cohort_generation_kwargs),
             " union all ".join(
                     f._sql_raw.format(

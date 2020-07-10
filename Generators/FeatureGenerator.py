@@ -113,7 +113,7 @@ class FeatureSet():
               from_cached=False):
         
         # Generate cohort here
-        with open(self._cohort_generation_script, 'r') as f:
+        with open(cohort_generation_script, 'r') as f:
             cohort_generation_sql_raw = f.read()
         
         sep_col = self.id_col

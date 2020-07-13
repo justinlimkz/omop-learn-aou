@@ -146,7 +146,7 @@ class FeatureSet():
 #             store = open(cache_file,'wb')
 #             cur.copy_expert(copy_sql, store)
             result = pd.read_sql(joined_sql, conn)
-            print(result.head())
+            print(result.shape)
             result.to_csv(cache_file)
 #             store.seek(0)
             print('Data loaded to buffer in {0:.2f} seconds'.format(

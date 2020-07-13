@@ -152,6 +152,9 @@ class FeatureSet():
             print('Data loaded to buffer in {0:.2f} seconds'.format(
                 time.time()-t
             ))
+    
+            # Get outcomes separately
+            cohort = pd.read_sql(cohort_generation_sql_raw.format(**cohort_generation_kwargs), conn)
             
         t = time.time()
         store = open(cache_file,'rb')
@@ -229,15 +232,19 @@ class FeatureSet():
         print('Generated Sparse Representation of Data in {0:.2f} seconds'.format(
             time.time() - t
         ))
+        
+        return cohort
 
     def get_sparr_rep(self):
         return self._spm_arr
         
 
 
-def postprocess_feature_matrix(cohort, featureSet):
+def postprocess_feature_matrix(cohort,
+                               featureSet,
+                               cohort_generation_kwargs=None):
     feature_matrix_3d = featureSet.get_sparr_rep()
-    outcomes = cohort._cohort.set_index('person_id').loc[
+    outcomes = cohort.set_index('person_id').loc[
         sorted(featureSet.seen_ids)
     ]['y']
     good_feature_ix = [
@@ -250,7 +257,7 @@ def postprocess_feature_matrix(cohort, featureSet):
     ]
     good_time_ixs = [
         i for i in sorted(featureSet.time_map)
-        if featureSet.time_map[i] <= cohort._cohort_generation_kwargs['training_end_date']
+        if featureSet.time_map[i] <= cohort_generation_kwargs['training_end_date']
     ]
     feature_matrix_3d = feature_matrix_3d[good_feature_ix, :, :]
     feature_matrix_3d = feature_matrix_3d[:, good_time_ixs, :]

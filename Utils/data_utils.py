@@ -9,15 +9,15 @@ def window_data(
     window_lengths = None,
     feature_matrix = None,
     all_feature_names = None,
-    cohort = None ,
     featureSet = None,
+    cohort_generation_kwargs = None,
     cohort_end_date_col='training_end_date'
 ):
     def gen_window_ixs(window_days):
         window_start = pd.to_datetime(
-            cohort._cohort_generation_kwargs[cohort_end_date_col]
+            cohort_generation_kwargs[cohort_end_date_col]
         ) - datetime.timedelta(days = window_days)
-        window_end = pd.to_datetime(cohort._cohort_generation_kwargs[cohort_end_date_col])
+        window_end = pd.to_datetime(cohort_generation_kwargs[cohort_end_date_col])
         windowed_rev_time_map = {
             t:i for i,t in featureSet.time_map.items()
             if pd.to_datetime(t) < window_end and pd.to_datetime(t) > window_start

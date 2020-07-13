@@ -88,7 +88,7 @@ with
 --     ) 
     
     select
-        row_number() over (order by te.person_id) - 1 as example_id,
+        row_number() over (order by d.person_id) - 1 as example_id,
         d.person_id,
         date '{training_start_date}' as start_date,
         date '{training_end_date}' as end_date,
